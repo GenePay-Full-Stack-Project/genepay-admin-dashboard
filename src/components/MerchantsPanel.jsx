@@ -6,7 +6,7 @@ const MerchantsPanel = ({ merchants, merchantRevenues, currency }) => (
       <div>
         <h2>Merchants</h2>
       </div>
-      
+      <button className="ghost-btn">Add merchant</button>
     </header>
     <table>
       <thead>

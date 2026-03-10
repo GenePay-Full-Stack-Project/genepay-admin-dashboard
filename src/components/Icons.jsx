@@ -38,4 +38,3 @@ export const EyeOff = ({ size = 18, stroke = 1.5, color = 'currentColor' }) => (
 )
 
 export default { Eye, EyeOff }
-

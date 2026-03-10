@@ -65,22 +65,27 @@ function App() {
   const handleLoginSubmit = (event) => {
     event.preventDefault()
     setLoginError('')
-    
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!loginForm.email || !emailRegex.test(loginForm.email)) {
-      setLoginError('Please enter a valid email address')
-      return
+    // call backend login
+    const doLogin = async () => {
+      try {
+        const resp = await api.loginAdmin({ email: loginForm.email, password: loginForm.password })
+        const tok = resp?.token ?? resp?.accessToken ?? null
+        if (!tok) throw new Error(resp?.message || 'No token received')
+        localStorage.setItem('bio_admin_token', tok)
+        setToken(tok)
+        setIsAuthenticated(true)
+        if (loginForm.remember) {
+          localStorage.setItem('bio_admin_login', JSON.stringify({ email: loginForm.email, password: loginForm.password }))
+        } else {
+          localStorage.removeItem('bio_admin_login')
+        }
+        await loadData(tok)
+      } catch (err) {
+        setLoginError(err?.message || 'Login failed')
+      }
     }
-    
-    // Validate password length (minimum 6 characters)
-    if (!loginForm.password || loginForm.password.length < 6) {
-      setLoginError('Password must be at least 6 characters long')
-      return
-    }
-    
-    // If validation passes, navigate to dashboard
-    setIsAuthenticated(true)
+
+    doLogin()
   }
 
   const handleLogout = () => {
@@ -194,7 +199,7 @@ function App() {
     },
     { total: 0, count: 0, nonSuccess: 0 },
   )
-//print report function
+
   const handlePrintReport = () => {
     if (!selectedUser) return
     const reportWindow = window.open('', '_blank', 'width=900,height=700')

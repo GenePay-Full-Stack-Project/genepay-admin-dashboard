@@ -1,6 +1,5 @@
-import { Fragment } from "react/jsx-dev-runtime";
-import React from "react";
-import { Eye, EyeOff } from "lucide-react";
+import React from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 
 // AuthCard renders only login for admins.
 const AuthCard = ({
@@ -40,7 +39,6 @@ const AuthCard = ({
                   className="with-right-icon"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  minLength="6"
                   value={loginForm.password}
                   onChange={(event) => setLoginForm((prev) => ({ ...prev, password: event.target.value }))}
                   placeholder="Enter Password"
